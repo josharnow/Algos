@@ -92,11 +92,11 @@ const generateCoinChange = (cents) => {
   minCoins[0] = 0; // There are 0 ways to make amount 0 with positive coin values; thus, fill array position 0 with a value of 0.
 
   for (let coin of coins) { // Look at one coin at a time
-    for (let i = 0; i <= cents; i++) {
+    for (let i = 0; i <= cents; i++) { // i represents the index in the minCoins array whose value is equal to the minimum number of coins necessary to create its value (e.g. if i = 5; the value would be 1 (for 1 nickel))
       // Make sure the difference between the current amount and the current coin is at least 0
       // Replace the minimum value
       if ((i - coin) >= 0) {
-        minCoins[i] = Math.min(minCoins[i], minCoins[i - coin] + 1) // Math.min returns the lowest number passed into it
+        minCoins[i] = Math.min(minCoins[i], minCoins[i - coin] + 1) // Math.min returns the lowest number passed into it, which will either be whatever is already in minCoins[i] OR minCoins[i - coin] + 1
       }
     }
   }
@@ -146,3 +146,92 @@ const generateCoinChange = (cents) => {
 console.log(generateCoinChange(93));
 // console.log(generateCoinChange(49));
 // console.log(generateCoinChange(19));
+
+
+// Statistics to Doubles
+// Implement a ‘die’ that randomly returns an integer between 1 and 6 inclusive. Roll a pair of these dice, tracking the statistics until doubles are rolled. Display the number of rolls, min, max, and average.
+const statisticsToDoubles = () => {
+  const getRandomInt = (min, max) => {
+    return Math.floor((Math.random() * max) + min);
+  }
+
+  let firstRollTracker = [];
+  let secondRollTracker = [];
+  
+  let rolls = 0;
+  let i = 0;
+  
+  firstRollTracker.push(getRandomInt(1, 6));
+  secondRollTracker.push(getRandomInt(1, 6));
+
+  if (firstRollTracker[i] === secondRollTracker[i]) {
+    ++rolls;
+  } else {
+    while (firstRollTracker[i] !== secondRollTracker[i]) {
+      ++rolls;
+      firstRollTracker.push(getRandomInt(1, 6));
+      secondRollTracker.push(getRandomInt(1, 6));
+      ++i;
+    }
+    ++rolls;
+  }
+
+  const minFirstDie = Math.min(...firstRollTracker);
+  const minSecondDie = Math.min(...secondRollTracker);
+  const overallMin = Math.min(minFirstDie, minSecondDie);
+
+  const maxFirstDie = Math.max(...firstRollTracker);
+  const maxSecondDie = Math.max(...secondRollTracker);
+  const overallMax = Math.max(maxFirstDie, maxSecondDie);
+
+  const sumFirstDie = firstRollTracker.reduce((previousValue, currentValue) => previousValue + currentValue);
+  const sumSecondDie = secondRollTracker.reduce((previousValue, currentValue) => previousValue + currentValue);
+  const overallSum = sumFirstDie + sumSecondDie;
+
+  const averageFirstDie = sumFirstDie / rolls;
+  const averageSecondDie = sumSecondDie / rolls;
+  const overallAverage = (sumFirstDie + sumSecondDie) / 2;
+
+  console.log(`Array of first die rolls: ${firstRollTracker}`);
+  console.log(`Array of second die rolls: ${secondRollTracker}`);
+
+  console.log(`First die minimum: ${minFirstDie}`);
+  console.log(`Second die minimum: ${minSecondDie}`);
+  console.log(`Overall minimum: ${overallMin}`);
+  console.log(`First die maximum: ${maxFirstDie}`);
+  console.log(`Second die maximum: ${maxSecondDie}`);
+  console.log(`Overall maximum: ${overallMax}`);
+  console.log(`First die sum: ${sumFirstDie}`);
+  console.log(`Second die sum: ${sumSecondDie}`);
+  console.log(`Overall sum: ${overallSum}`);
+  console.log(`First die average: ${averageFirstDie}`);
+  console.log(`Second die average: ${averageSecondDie}`);
+  console.log(`Overall average: ${overallAverage}`);
+  console.log(`Total number of rolls: ${rolls}`);
+}
+
+statisticsToDoubles();
+
+
+// Sum to One Digit
+// Implement a function sumToOne(num) that, given a number, sums that number’s digits repeatedly until the sum is only one digit.Return that final one digit result.
+
+const sumToOneDigit = (num) => {
+  const digitize = (int) => {
+  // Converts the integer to a string using the spread operator to build an array, then transforms each string back into an integer inside the array. A string literal is used to convert the given integer (which is not iterable) into a string (which is iterable). If .map() is not used together with parseInt(), the values inside of the created array will remain as strings instead of integers.
+    return [...`${int}`].map(string => parseInt(string));
+  }
+
+  let arrayOfDigits = digitize(num);
+  
+  // The while loop will continue until there is no longer a value present in the array position 1 of arrayOfDigits (i.e. there is only a value in array position 0, indicating a 1 digit number)
+  while (arrayOfDigits[1]) {
+    console.log(arrayOfDigits);
+    
+    let sum = arrayOfDigits.reduce((prevVal, currVal) => prevVal + currVal);
+    arrayOfDigits = digitize(sum);
+  }
+  console.log(`Result: ${arrayOfDigits[0]}`)
+}
+
+sumToOneDigit(542609);
