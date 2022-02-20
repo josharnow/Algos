@@ -1,2 +1,2 @@
 # Algos
-Various algorithms I have designed to solve problems
+Various algorithms I have designed to solve problems.
