@@ -78,3 +78,71 @@ const betterThreeFives = (start, end) => {
 }
 
 betterThreeFives(10, 400000);
+
+
+// Implement generateCoinChange(cents) that accepts a parameter for the number of cents, and computes how to represent that amount with the smallest number of coins.
+// This is a Dynamic Programming problem
+const generateCoinChange = (cents) => {
+  const coins = [1, 5, 10, 25];
+
+  // Create an array to hold the minimum number of coins to make each cents amount
+  // cents + 1 so that you will have indices from 0 to cents in the array
+  const minCoins = new Array(cents + 1).fill(Infinity);
+  
+  minCoins[0] = 0; // There are 0 ways to make amount 0 with positive coin values; thus, fill array position 0 with a value of 0.
+
+  for (let coin of coins) { // Look at one coin at a time
+    for (let i = 0; i <= cents; i++) {
+      // Make sure the difference between the current amount and the current coin is at least 0
+      // Replace the minimum value
+      if ((i - coin) >= 0) {
+        minCoins[i] = Math.min(minCoins[i], minCoins[i - coin] + 1) // Math.min returns the lowest number passed into it
+      }
+    }
+  }
+  
+  let pennies = 0;
+  let nickels = 0;
+  let dimes = 0;
+  let quarters = 0;
+
+  let j = minCoins[cents]; // Set j equal to the minimum number of total coins necessary to reach the specified amount of cents
+  let remainder = 0;
+  let changeLeft = cents;
+
+  // This while loop will assign the correct coin values in order to achieve the minimum number of coins to produce the change
+  while (j > 0) {
+    if ((cents - (quarters * 25)) / 25 >= 1) {
+      remainder = changeLeft % 25;
+      quarters = (cents - remainder) / 25;
+
+      changeLeft -= quarters * 25;
+      j -= quarters;
+    } else if ((changeLeft / 10) >= 1) {
+      remainder = changeLeft % 10;
+      dimes = (changeLeft - remainder) / 10;
+
+      changeLeft -= dimes * 10;
+      j -= dimes;
+    } else if ((changeLeft / 5) >= 1) {
+      remainder = changeLeft % 5;
+      nickels = (changeLeft - remainder) / 5;
+
+      changeLeft -= nickels * 5;
+      j -= nickels;
+    } else {
+      pennies = changeLeft;
+
+      j -= pennies;
+    }
+  }
+
+  console.log(`Quarters: ${quarters}, Dimes: ${dimes}, Nickels: ${nickels}, Pennies: ${pennies}`);
+
+  // If the value remains Infinity, it means no coin combination can make that cents amount
+  return ((minCoins[cents] !== Infinity) ? minCoins[cents] : -1)
+}
+
+console.log(generateCoinChange(93));
+// console.log(generateCoinChange(49));
+// console.log(generateCoinChange(19));
