@@ -239,8 +239,8 @@ sumToOneDigit(542609);
 // Implement the Fibonacci function, a famous mathematical equation that generates a numerical sequence such that each number is the sum of the previous two.The Fibonacci numbers at index 0 and 1, coincidentally, have values of 0 and 1. Your function should accept an argument of which Fibonacci number.
 // F(n) = F(n-1) + F(n-2)
 const fibonacciLoop = (num) => {
-  let a = 1;
-  let b = 0;
+  let a = 1; // F(n-1)
+  let b = 0; // F(n-2)
   let arr = [];
   let i = num;
   let temp;
@@ -284,3 +284,50 @@ const fibonacciMemo = (num, memo) => {
 }
 
 console.log(fibonacciMemo(27));
+
+// Last Digit of A to the B
+// Implement a function that accepts two non - negative integers as arguments. Function lastDigitAtoB(a, b) should return the last digit of the first number(a) raised to an exponent of the second number(b).
+// Only the last digit should need to be multiplied
+const lastDigitAtoB = (a, b) => {
+  const digitize = (int) => {
+    return [...`${int}`].map(string => parseInt(string));
+  }
+
+  let arr = digitize(a); // Puts digits of "a" into an array
+  
+  arr = digitize(arr[arr.length - 1] ** b); // Raises the last digit of "a" to the exponent "b," and puts those digits into an array
+
+  return arr[arr.length - 1]; // Returns the last digit
+}
+
+console.log(lastDigitAtoB(12,5));
+
+// Create function clockHandAngles(seconds) that, given the number of seconds since 12:00:00, will print the angles (in degrees) of the hour, minute and second hands. As a quick review, there are 360 degrees in a full arc rotation. Treat “straight - up” 12:00:00 as 0 degrees for all hands.
+
+const clockHandAngles = (seconds) => {
+  const degreesPerSecond = 360 / 60;
+  const degreesPerMinute = degreesPerSecond / 60;
+  const degreesPerHour = degreesPerMinute / 12;
+  
+  const secondHand = (seconds) => {
+    const convertedDegrees = (seconds * degreesPerSecond) % 360; // Modulo operator converts degrees >= 360 to smaller angle equivalents
+
+    return convertedDegrees;
+  }
+
+  const minuteHand = (seconds) => {
+    const convertedDegrees = (seconds * degreesPerMinute) % 360;
+
+    return convertedDegrees;
+  }
+
+  const hourHand = (seconds) => {
+    const convertedDegrees = (seconds * degreesPerHour) % 360;
+
+    return convertedDegrees;
+  }
+
+  return console.log(`Hour hand: ${hourHand(seconds)} degrees` + "\n" + `Minute hand: ${minuteHand(seconds)} degrees` + "\n" + `Second hand: ${secondHand(seconds)} degrees`);
+}
+
+clockHandAngles(366);
