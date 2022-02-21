@@ -235,3 +235,52 @@ const sumToOneDigit = (num) => {
 }
 
 sumToOneDigit(542609);
+
+// Implement the Fibonacci function, a famous mathematical equation that generates a numerical sequence such that each number is the sum of the previous two.The Fibonacci numbers at index 0 and 1, coincidentally, have values of 0 and 1. Your function should accept an argument of which Fibonacci number.
+// F(n) = F(n-1) + F(n-2)
+const fibonacciLoop = (num) => {
+  let a = 1;
+  let b = 0;
+  let arr = [];
+  let i = num;
+  let temp;
+
+  while (i >= 0) {
+    arr.push(b);
+    temp = a;
+    a += b;
+    b = temp;
+    --i;
+  }
+
+  console.log(arr);
+  return arr[num];
+}
+
+console.log(fibonacciLoop(27));
+
+const fibonacciRecursive = (num) => {
+  if (num <= 1) { // Base case
+    return num;
+  }
+
+  return fibonacciRecursive(num - 1) + fibonacciRecursive(num - 2);
+}
+
+console.log(fibonacciRecursive(27));
+
+const fibonacciMemo = (num, memo) => {
+  memo = memo || {};
+
+  if (memo[num]) { // Stores the value of each index in a hash, avoiding the computational time of that value for the next N times
+    return memo[num];
+  }
+
+  if (num <= 1) { // Base case
+    return num;
+  }
+
+  return memo[num] = fibonacciMemo(num - 1, memo) + fibonacciMemo(num - 2, memo);
+}
+
+console.log(fibonacciMemo(27));
